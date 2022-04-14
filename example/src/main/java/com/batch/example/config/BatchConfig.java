@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.batch.example.tasklet.TaskletStep;
+
 @Configuration
 @EnableBatchProcessing
 public class BatchConfig {
 
-//	@Autowired
-	//TaskletStep taskletStep;
+	@Autowired
+	TaskletStep taskletStep;
 	
 	@Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -27,7 +29,7 @@ public class BatchConfig {
     public Job job() {
         return jobBuilderFactory.get("The Job")
                 .incrementer(new RunIdIncrementer())
-                .start(stepOne())/*.next(stepTwo())*/
+                .start(stepOne()).next(stepTwo())
                 .build();
     }
 	
@@ -40,10 +42,10 @@ public class BatchConfig {
                 .build();
     }
     
-  //  @Bean
-   // public Step stepTwo() {
-       // return stepBuilderFactory.get("Step Two")
-        	//	.tasklet(taskletStep)
-               // .build();
-   // }
+    @Bean
+    public Step stepTwo() {
+        return stepBuilderFactory.get("Step Two")
+        		.tasklet(taskletStep)
+                .build();
+    }
 }
