@@ -29,22 +29,13 @@ public class BatchConfig {
     public Job job() {
         return jobBuilderFactory.get("The Job")
                 .incrementer(new RunIdIncrementer())
-                .start(stepOne()).next(stepTwo())
-                .build();
-    }
-	
-    @Bean
-    public Step stepOne() {
-        return stepBuilderFactory.get("Step One")
-                .<String, String> chunk(1)
-               // .reader(new MyItemReader())
-               // .writer(new MyItemWriter())
+                .start(step())
                 .build();
     }
     
     @Bean
-    public Step stepTwo() {
-        return stepBuilderFactory.get("Step Two")
+    public Step step() {
+        return stepBuilderFactory.get("Step")
         		.tasklet(taskletStep)
                 .build();
     }
